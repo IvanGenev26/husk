@@ -7,7 +7,7 @@ and processes work under the hood.
 
 ## Features
 - [x] Prompt and reading input
-- [ ] Running commands (fork + exec)
+- [x] Running commands (fork + exec)
 - [ ] Built-ins: `cd`, `exit`
 - [ ] Pipes (`|`)
 - [ ] Redirection (`>`, `<`)
