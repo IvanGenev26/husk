@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/wait.h>
 
 
 int main(void) {
@@ -27,10 +30,22 @@ int main(void) {
             count++;
             word = strtok(NULL, " ");
         }
-        for (int i = 0; i < count; i++) {
-            printf("[%s]\n", args[i]);
-        }
         args[count] = NULL;
+
+        if (count == 0) {
+            continue;
+        }
+
+        pid_t pid = fork();
+
+
+        if (pid == 0) {
+            execvp(args[0], args);
+            perror("husk");
+            exit(1);
+        } else {
+            waitpid(pid, NULL, 0);
+        }
 
     }
 
