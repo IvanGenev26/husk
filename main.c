@@ -11,6 +11,7 @@ int main(void) {
 
     while(true) {
         printf("husk> ");
+        fflush(stdout);
         if (fgets(line, sizeof(line), stdin) == NULL) {
             printf("\n");
             break;
@@ -33,6 +34,20 @@ int main(void) {
         args[count] = NULL;
 
         if (count == 0) {
+            continue;
+        }
+
+        if (strcmp(args[0], "cd") == 0) {
+            char *dir;
+            if (args[1] == NULL) {
+                dir = getenv("HOME");
+            } else {
+                dir = args[1];
+            }
+
+            if (chdir(dir) != 0) {
+                perror("husk");
+            }
             continue;
         }
 
