@@ -8,9 +8,11 @@
 
 int main(void) {
     char line[1024];
+    char cwd[1024];
 
     while(true) {
-        printf("husk> ");
+        getcwd(cwd, sizeof(cwd));
+        printf("husk:%s> ", cwd);
         fflush(stdout);
         if (fgets(line, sizeof(line), stdin) == NULL) {
             printf("\n");
