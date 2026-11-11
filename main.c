@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <fcntl.h>
 
 
 int main(void) {
@@ -39,6 +40,16 @@ int main(void) {
             continue;
         }
 
+        char *outfile = NULL;
+
+        for (int i = 0; i < count; i++) {
+            if (strcmp(args[i], ">") == 0) {
+                outfile = args[i+1];
+                args[i] = NULL;
+                break;
+            }
+        }
+
         if (strcmp(args[0], "cd") == 0) {
             char *dir;
             if (args[1] == NULL) {
@@ -57,6 +68,15 @@ int main(void) {
 
 
         if (pid == 0) {
+            if (outfile != NULL) {
+                int fd = open(outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+                if (fd < 0) {
+                    perror("open");
+                    exit(1);
+                }
+                dup2(fd, 1);
+                close(fd);
+            }
             execvp(args[0], args);
             perror("husk");
             exit(1);
