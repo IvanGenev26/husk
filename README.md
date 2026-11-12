@@ -10,7 +10,7 @@ and processes work under the hood.
 - [x] Running commands (fork + exec)
 - [x] Built-ins: `cd`, `exit`
 - [ ] Pipes (`|`)
-- [ ] Redirection (`>`, `<`)
+- [x] Redirection (`>`, `<`)
 
 ## Build
 ​```bash

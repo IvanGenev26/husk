@@ -41,13 +41,22 @@ int main(void) {
         }
 
         char *outfile = NULL;
+        char *infile = NULL;
+
 
         for (int i = 0; i < count; i++) {
             if (strcmp(args[i], ">") == 0) {
                 outfile = args[i+1];
                 args[i] = NULL;
-                break;
+            } else if (strcmp(args[i], "<") == 0) {
+                infile = args[i+1];
+                args[i] = NULL;
             }
+        }
+
+        if (args[0] == NULL) {
+            fprintf(stderr, "husk: missing command\n");
+            continue;
         }
 
         if (strcmp(args[0], "cd") == 0) {
@@ -64,6 +73,8 @@ int main(void) {
             continue;
         }
 
+
+
         pid_t pid = fork();
 
 
@@ -75,6 +86,15 @@ int main(void) {
                     exit(1);
                 }
                 dup2(fd, 1);
+                close(fd);
+            }
+            if (infile != NULL) {
+                int fd = open(infile, O_RDONLY);
+                if (fd < 0) {
+                    perror("open");
+                    exit(1);
+                }
+                dup2(fd, 0);
                 close(fd);
             }
             execvp(args[0], args);
